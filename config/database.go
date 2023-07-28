@@ -34,11 +34,16 @@ func Connect() (*gorm.DB, error) {
 func Migrate() error {
 	err := DB.AutoMigrate(
 		&entities.User{},
+		&entities.MasterAuthor{},
+		&entities.MasterBook{},
 	)
 
 	if err != nil {
 		return err
 	}
+
+	DB.Migrator().CreateConstraint(&entities.MasterAuthor{}, "MasterBooks")
+	DB.Migrator().CreateConstraint(&entities.MasterAuthor{}, "fk_master_authors_master_books")
 
 	log.Println("Database Migration Completed...")
 	return nil
