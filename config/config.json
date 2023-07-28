@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "port": "5432",
+  "database_name": "cele_go_project",
+  "username":"postgres",
+  "password":"ktl123"
+}
