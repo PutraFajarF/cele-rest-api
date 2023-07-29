@@ -9,7 +9,7 @@ import (
 
 type Service interface {
 	RegisterUser(input RegisterUserInput) (entities.User, error)
-	// LoginUser(input LoginInput) (entities.User, error)
+	LoginUser(input LoginInput) (entities.User, error)
 	GetUserByID(ID int) (entities.User, error)
 }
 
@@ -50,6 +50,27 @@ func (s *service) RegisterUser(input RegisterUserInput) (entities.User, error) {
 	}
 
 	return newUser, nil
+}
+
+func (s *service) LoginUser(input LoginInput) (entities.User, error) {
+	email := input.Email
+	password := input.Password
+
+	user, err := s.repository.FindUserByEmail(email)
+	if err != nil {
+		return user, err
+	}
+
+	if user.ID == 0 {
+		return user, errors.New("data user tidak ditemukan berdasarkan email")
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
 
 func (s *service) GetUserByID(ID int) (entities.User, error) {
