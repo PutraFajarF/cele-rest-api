@@ -5,6 +5,8 @@ import (
 	"project-rest-api/auth"
 	"project-rest-api/config"
 	"project-rest-api/handler"
+	"project-rest-api/master_author"
+	"project-rest-api/master_book"
 	"project-rest-api/routes"
 	"project-rest-api/user"
 
@@ -30,21 +32,30 @@ func main() {
 
 	// Call repository
 	userRepository := user.NewRepository(db)
+	masterAuthorRepository := master_author.NewRepository(db)
+	masterBookRepository := master_book.NewRepository(db)
 
 	// call service
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
+	masterAuthorService := master_author.NewService(masterAuthorRepository)
+	masterBookService := master_book.NewService(masterBookRepository)
 
 	// call handler
 	userHandler := handler.NewUserHandler(userService, authService)
+	masterAuthorHandler := handler.NewMasterAuthorHandler(masterAuthorService)
+	masterBookHandler := handler.NewMasterBookHandler(masterBookService)
 
 	// gin router
 	router := gin.Default()
 
 	// api versioning
 	userApi := router.Group("/api/v1/user")
+	masterApi := router.Group("/api/v1/master")
 
 	routes.UserRoutes(userApi, userHandler)
+	routes.MasterAuthorRoutes(masterApi, masterAuthorHandler)
+	routes.MasterBookRoutes(masterApi, masterBookHandler)
 
 	router.Run()
 }
