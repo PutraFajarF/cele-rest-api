@@ -38,7 +38,7 @@ func (r *repository) StoreMasterBook(masterBook entities.MasterBook) (entities.M
 		return masterBook, err
 	}
 
-	if errors.Is(err, gorm.ErrRecordNotFound) == true {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return masterBook, gorm.ErrRecordNotFound
 	}
 
