@@ -54,7 +54,7 @@ func main() {
 	masterApi := router.Group("/api/v1/master")
 
 	routes.UserRoutes(userApi, userHandler)
-	routes.MasterAuthorRoutes(masterApi, masterAuthorHandler)
+	routes.MasterAuthorRoutes(masterApi, masterAuthorHandler, db, authService, userService)
 	routes.MasterBookRoutes(masterApi, masterBookHandler)
 
 	router.Run()

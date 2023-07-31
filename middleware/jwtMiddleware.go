@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"project-rest-api/auth"
 	"project-rest-api/helper"
@@ -48,6 +49,7 @@ func AuthMiddleware(authService auth.Service, userService user.Service) gin.Hand
 
 		jwtClaim, ok := token.Claims.(jwt.MapClaims)
 		if !ok || !token.Valid {
+			fmt.Println("1", jwtClaim)
 			response := helper.JsonResponse("Unauthorized", http.StatusUnauthorized, "error", nil)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
